@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>I did this website just for this blog post because now I can</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --bg-2: #13161e;
+      --bg-3: #1a1e29;
+      --surface: #1f2433;
+      --border: #2a3045;
+      --green: #4ade80;
+      --green-dim: #22543d;
+      --amber: #fbbf24;
+      --amber-dim: #78350f;
+      --blue: #60a5fa;
+      --text: #e2e8f0;
+      --text-muted: #8892a4;
+      --text-dim: #4a5568;
+      --mono: 'JetBrains Mono', monospace;
+      --serif: 'Fraunces', Georgia, serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* SCANLINE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.07) 2px,
+        rgba(0,0,0,0.07) 4px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* NOISE TEXTURE */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    /* HEADER */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13, 15, 20, 0.92);
+      backdrop-filter: blur(12px);
+    }
+
+    .header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 52px;
+      gap: 1rem;
+    }
+
+    .site-title {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .site-title .cursor {
+      display: inline-block;
+      width: 7px;
+      height: 13px;
+      background: var(--green);
+      vertical-align: middle;
+      margin-left: 2px;
+      animation: blink 1.1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .header-tag {
+      font-size: 0.65rem;
+      color: var(--green);
+      border: 1px solid var(--green-dim);
+      padding: 2px 8px;
+      border-radius: 2px;
+      white-space: nowrap;
+      letter-spacing: 0.05em;
+    }
+
+    /* HERO */
+    .hero {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 6rem 2rem 3rem;
+      position: relative;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--amber);
+      border: 1px solid var(--amber-dim);
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+
+    .tag.blue {
+      color: var(--blue);
+      border-color: #1e3a5f;
+    }
+
+    .meta-line {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: #f1f5f9;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      max-width: 700px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--green);
+    }
+
+    .hero-subtitle {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+      max-width: 560px;
+      line-height: 1.6;
+    }
+
+    /* TERMINAL DIVIDER */
+    .term-divider {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .term-divider-inner {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.2rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    .term-prompt {
+      font-size: 0.7rem;
+      color: var(--green);
+      white-space: nowrap;
+    }
+
+    .term-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+    }
+
+    /* ARTICLE BODY */
+    article {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    /* INTRO PARAGRAPHS */
+    .intro-block {
+      margin-bottom: 4rem;
+    }
+
+    .intro-block p {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: #cbd5e1;
+      margin-bottom: 1.2rem;
+    }
+
+    /* SECTIONS */
+    .section {
+      margin-bottom: 4.5rem;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+      flex-wrap: wrap;
+    }
+
+    .section-number {
+      font-size: 0.65rem;
+      color: var(--green);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      white-space: nowrap;
+      padding-top: 4px;
+    }
+
+    .section h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.3rem, 3vw, 1.75rem);
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .section p {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: #b0bec5;
+      margin-bottom: 1.2rem;
+    }
+
+    .section p:last-child { margin-bottom: 0; }
+
+    .section p strong, .section p b {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .section p em {
+      font-style: italic;
+      color: #e2e8f0;
+    }
+
+    /* CALLOUT BLOCKS */
+    .callout {
+      background: var(--bg-3);
+      border-left: 3px solid var(--green);
+      padding: 1.2rem 1.5rem;
+      margin: 2rem 0;
+      border-radius: 0 4px 4px 0;
+      position: relative;
+    }
+
+    .callout::before {
+      content: '// insight';
+      position: absolute;
+      top: -9px;
+      left: 1.5rem;
+      font-size: 0.6rem;
+      color: var(--green);
+      background: var(--bg-3);
+      padding: 0 6px;
+      letter-spacing: 0.08em;
+    }
+
+    .callout p {
+      font-family: var(--mono) !important;
+      font-size: 0.82rem !important;
+      font-weight: 400 !important;
+      color: #94a3b8 !important;
+      line-height: 1.7 !important;
+      margin: 0 !important;
+    }
+
+    .callout p em {
+      color: var(--green) !important;
+      font-style: normal !important;
+    }
+
+    /* HIGHLIGHT QUOTE */
+    .pull-quote {
+      text-align: center;
+      padding: 3rem 2rem;
+      margin: 3rem 0;
+      position: relative;
+    }
+
+    .pull-quote::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .pull-quote::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .pull-quote p {
+      font-family: var(--serif) !important;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem) !important;
+      font-weight: 300 !important;
+      font-style: italic !important;
+      color: #e2e8f0 !important;
+      line-height: 1.5 !important;
+      max-width: 580px;
+      margin: 0 auto !important;
+    }
+
+    .pull-quote p strong {
+      color: var(--green) !important;
+      font-style: normal !important;
+      font-weight: 600 !important;
+    }
+
+    /* WARNING BLOCK */
+    .warning-block {
+      background: rgba(251, 191, 36, 0.05);
+      border: 1px solid var(--amber-dim);
+      border-left: 3px solid var(--amber);
+      padding: 1.2rem 1.5rem;
+      margin: 2rem 0;
+      border-radius: 0 4px 4px 0;
+      position: relative;
+    }
+
+    .warning-block::before {
+      content: '! warning';
+      position: absolute;
+      top: -9px;
+      left: 1.5rem;
+      font-size: 0.6rem;
+      color: var(--amber);
+      background: var(--bg);
+      padding: 0 6px;
+      letter-spacing: 0.08em;
+    }
+
+    .warning-block p {
+      font-family: var(--mono) !important;
+      font-size: 0.82rem !important;
+      color: #a0916a !important;
+      margin: 0 !important;
+      line-height: 1.7 !important;
+    }
+
+    /* CLOSING */
+    .closing {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3rem;
+      margin-top: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .closing::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--green), var(--blue), transparent);
+    }
+
+    .closing-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: var(--green);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .closing-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .closing p {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 300;
+      color: #94a3b8;
+      line-height: 1.85;
+      margin-bottom: 1.2rem;
+    }
+
+    .closing p:last-child { margin-bottom: 0; }
+
+    .closing p em {
+      color: #e2e8f0;
+      font-style: italic;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+    }
+
+    .footer-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-left {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+    }
+
+    .footer-left span {
+      color: var(--green);
+    }
+
+    .footer-right {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+
+    /* SCROLL PROGRESS */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--green), var(--blue));
+      z-index: 200;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .hero { padding: 4rem 1.25rem 2rem; }
+      article { padding: 0 1.25rem 4rem; }
+      .term-divider { padding: 0 1.25rem; }
+      .closing { padding: 2rem 1.5rem; }
+      .site-title { font-size: 0.6rem; }
+      header { padding: 0 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<header>
+  <div class="header-inner">
+    <span class="site-title">I did this website just for this blog post because now I can<span class="cursor"></span></span>
+    <span class="header-tag">Michael Zwyssig &amp; Claude.ai</span>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-meta">
+    <span class="tag">Engineering Culture</span>
+    <span class="tag blue">AI + Humans</span>
+    <span class="meta-line">March 9, 2026 &nbsp;·&nbsp; ~10 min read</span>
+  </div>
+  <h1>AI Makes Your Job <em>More Human,</em> Not Less</h1>
+  <p class="hero-subtitle">A first-person essay for engineers, product managers, designers, and the people who lead them.</p>
+</section>
+
+<div class="term-divider">
+  <div class="term-divider-inner">
+    <span class="term-prompt">$ cat essay.md | render --mode human</span>
+    <div class="term-line"></div>
+  </div>
+</div>
+
+<article>
+
+  <div class="intro-block section">
+    <p>There's a narrative circulating in tech right now that goes something like this: AI is coming for your job. The coder who doesn't adapt will be replaced. The PM who still writes specs by hand is already behind. The designer who hasn't adopted generative tools is irrelevant.</p>
+    <p>I want to push back on that. Not because it's entirely wrong, but because it's pointing at the wrong thing. The real shift isn't about who gets replaced. It's about what we're finally being freed to do.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">// 01</span>
+      <h2>The Codebase I Could Never Fully See</h2>
+    </div>
+    <p>As an Engineering Manager, one of my most persistent frustrations has been this: I lead a team that has deep dependencies with many others, spanning multiple repositories, multiple domains, multiple stakeholders, and keeping a clear mental model of how all of it connects has always been an uphill battle. There's always more alignment to do than there is time to do it.</p>
+    <p>This weekend, I used Claude to build a complete map of our entire codebase. Not a summary. Not a high-level diagram someone drew two years ago and never updated. A living, queryable understanding of how the pieces actually connect: across teams, across services, across responsibilities. Something I could ask questions of.</p>
+    <p>I showed it to a product manager. Her immediate reaction wasn't "cool tech demo." It was: "How many meetings could we have avoided with this?"</p>
+    <div class="callout"><p>That's the real promise of AI in engineering organizations. Not speed. Not automation. <em>Clarity.</em> And clarity, it turns out, is a deeply human thing to pursue.</p></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">// 02</span>
+      <h2>What AI Is Actually Good At</h2>
+    </div>
+    <p>There's a principle we've held in our engineering culture for a while now, one I find increasingly prophetic: <em>computers perform repetitive tasks, people solve problems.</em></p>
+    <p>We wrote that before AI became capable of the things it can do today. But the principle has never been more relevant. Because what AI excels at, pattern matching, synthesis, translation, generation within a known context, is precisely the category of work that was always the least interesting part of the job anyway.</p>
+    <p>One of our engineers used AI to replicate Android code to iOS. We've spun up dozens of throw-away tools to clarify ambiguous situations, tools that previously would have either never been built, or taken weeks to justify. We're doing refactorings we always knew were needed but could never prioritize. The backlog of "we should really clean this up" is finally shrinking.</p>
+    <div class="pull-quote">
+      <p>None of this replaced anyone. It removed friction. And friction, it turns out, is the enemy of thinking. When the tedious work disappears, something shifts. People start asking better questions. They look up from the implementation and start seeing the problem again. They have <strong>room to think,</strong> and room to think is where the best work actually comes from.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">// 03</span>
+      <h2>The Engineer Who Stops Being "Just" a Coder</h2>
+    </div>
+    <p>Here's where I want to be honest about something uncomfortable.</p>
+    <p>There is a category of engineering work that AI will make obsolete. It's the work defined entirely by taking a specification and translating it into code. Input in, output out. No judgment, no curiosity, no ownership of the outcome.</p>
+    <p>I've seen what happens in teams where this is the dominant culture. The engineer's identity is bound to the implementation, not the problem. They are, in a very real sense, waiting to be told what to build. And that, not AI, is the actual risk.</p>
+    <p>The engineers who will thrive aren't the ones who learn the most tools. They're the ones who already understand, or are willing to learn, that their job is to solve problems and build products. That means talking to stakeholders. Understanding the business. Caring <em>why</em> something is being built, not just how. It means that "that's not my job" is never an acceptable answer, because everyone is part of the same plane, and everyone needs to know which direction it's flying.</p>
+    <div class="callout"><p>Culture is what separates these two types of engineers. And culture is what an Engineering Manager is actually responsible for building.</p></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">// 04</span>
+      <h2>The King Engineer Problem</h2>
+    </div>
+    <p>I once observed a team at another company organized around a single person who held all the architectural knowledge in their head. No documentation. No shared understanding. Every decision funneled through one human who had, over years, made themselves indispensable.</p>
+    <p>AI broke this arrangement almost overnight. Not by firing the engineer. By making the knowledge accessible. In a matter of hours, an AI tool could analyze, document, and surface what had taken years to accumulate, and suddenly the organizational structure that had been built around one person's irreplaceability simply didn't hold.</p>
+    <p>The lesson I took from this wasn't that engineers should hide their knowledge faster. It was the opposite: in a culture where knowledge is shared, where documentation is a value, where curiosity and continuous learning are expected of everyone, AI amplifies the whole team. In a culture where knowledge hoarding is survival, AI is a threat.</p>
+    <div class="warning-block"><p>Culture isn't a nice-to-have. It's the architecture that determines whether AI makes your team more capable or simply more vulnerable.</p></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">// 05</span>
+      <h2>Why AI Demands More Human Contact, Not Less</h2>
+    </div>
+    <p>This is the part that surprises people most when I say it out loud.</p>
+    <p>Most people assume AI reduces the need for human interaction. You talk to the machine instead of a colleague. You generate the spec instead of workshopping it. You get an answer without needing to ask anyone. Sounds efficient.</p>
+    <p>But that logic only holds if your team is already deeply aligned: on vision, on values, on what you're actually building and why. In my experience, most teams are less aligned than they think. They just don't notice, because they're moving slowly enough to self-correct.</p>
+    <p><strong>AI removes that buffer.</strong></p>
+    <p>Think of an aircraft where the engines, the wings, and the cockpit are all operating at full power, each optimizing independently. The result isn't a faster plane. It's a plane that comes apart. And it comes apart faster precisely because everything is so powerful.</p>
+    <p>When AI accelerates every individual's output, the cost of misalignment compounds quickly. A PM generating specs at twice the speed, while an engineer is building infrastructure for a different vision, while a designer is solving for a user journey that doesn't match the product strategy: you haven't moved faster. You've built more of the wrong thing, faster.</p>
+    <p>The answer isn't to slow down AI adoption. The answer is to invest, seriously and deliberately, in the human rituals that make fast movement coherent.</p>
+    <p>This means more pairing sessions, not fewer. Not pair programming in the narrow sense, but the habit of thinking out loud with another person before building. It means more of those informal coffee chats where someone says "wait, I thought we were doing it this way" and saves three weeks of misaligned work. It means alignment conversations that happen before the sprint, not during the retrospective.</p>
+    <div class="callout"><p>The most important skill for product teams in the AI era isn't prompting. It's staying genuinely connected to each other, to the problem, and to the people you're building for. AI accelerates execution. Humans still need to agree on the direction. <em>And that agreement doesn't happen in a prompt. It happens between people.</em></p></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">// 06</span>
+      <h2>The Fake Confidence Problem</h2>
+    </div>
+    <p>One thing I've watched happen, and it worries me, is what I'd call the overconfidence loop.</p>
+    <p>AI tools are fluent. They sound authoritative. They produce clean, confident output. And for engineers or PMs who haven't yet developed strong judgment about their domain, this fluency can be mistaken for correctness. You stop questioning the output because the output sounds so sure of itself. You stop learning because the answer appears instantly.</p>
+    <p>This is not the self-trust I want to cultivate in my team.</p>
+    <p>The kind of trust worth building is grounded. It comes from understanding <em>why</em> something works, not just that it does. It comes from having made mistakes and learned from them. It comes from a culture where questioning AI output is expected, not seen as inefficiency, where the engineer's job is to evaluate, adapt, and own the result, not simply accept it.</p>
+    <div class="warning-block"><p>AI as a sparring partner is powerful. AI as an authority to defer to is dangerous. The difference lives in culture, in psychological safety, and in whether the people around you ask "does this make sense?" as a habit, not as an exception.</p></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">// 07</span>
+      <h2>What a Culture Ready for AI Looks Like</h2>
+    </div>
+    <p>I've been sitting with this question for a while. I don't think I have a complete answer, but I know what it doesn't look like.</p>
+    <p>It doesn't look like a team that's impressed by AI output. It looks like a team that interrogates it.</p>
+    <p>It doesn't look like a team where engineers wait for specs. It looks like a team where engineers ask why the spec exists before they implement it.</p>
+    <p>It doesn't look like a team where knowledge lives in one person's head, or one model's context window. It looks like a team where understanding is continuously built, shared, and challenged.</p>
+    <p>The behaviors I'd look for: Does your designer ask what outcome the user flow is serving, or just execute on the wireframe? Does your PM validate assumptions before writing requirements, or generate requirements to fill a backlog? Does your engineer push back on a story because they spotted a better architectural path, or do they just ship what's asked?</p>
+    <div class="callout"><p>These aren't AI questions. They're culture questions. But AI makes them urgent in a way they weren't before.</p></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-number">// 08</span>
+      <h2>What This Means for Engineering Managers</h2>
+    </div>
+    <p>If AI takes care of more of the implementation, then what's left for an EM to do?</p>
+    <p><strong>Everything that actually matters.</strong></p>
+    <p>Motivating people to grow. Helping engineers find the courage to talk to stakeholders, to care about product outcomes, to see themselves as problem-solvers rather than code producers. Building teams where trust is real, where curiosity is rewarded, where the "that's not my job" reflex has been coached out of the culture.</p>
+    <p>AI cannot build team spirit. It cannot make someone feel seen in a difficult moment, or help a junior engineer discover that they're more capable than they believed. It cannot hold the organizational tension that comes from fast change, and right now, there is a lot of fast change.</p>
+    <p>The EM's job is becoming more human, not less. More coach, more culture carrier, more translator between business reality and technical possibility. Less ticket tracker, less process enforcer, less bottleneck.</p>
+    <p>Honestly? It's a better job. The parts AI is taking were never the interesting parts anyway.</p>
+  </div>
+
+  <div class="closing section">
+    <div class="closing-label">// closing thought</div>
+    <p>We have a value on our team that I keep coming back to: <em>curiosity and continuous learning.</em> We wrote it down before AI changed everything. But I think it might be the most important thing we ever wrote.</p>
+    <p>Because the teams that will thrive aren't the ones with the best AI tools. They're the ones where people remain genuinely curious, about the technology, yes, but more importantly about the people they're building for, the problems they're solving, and each other.</p>
+    <p>That's not something you can generate. That's something you build, deliberately, over time, together.</p>
+    <p>And that's why, in the age of AI, company culture has never mattered more.</p>
+  </div>
+
+</article>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">Michael Zwyssig <span>&amp;</span> Claude.ai &nbsp;/&nbsp; March 9, 2026</div>
+    <div class="footer-right">exit 0</div>
+  </div>
+</footer>
+
+<script>
+  // Scroll progress bar
+  const progress = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progress.style.width = pct + '%';
+  });
+
+  // Intersection observer for section fade-in
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
